@@ -1,5 +1,5 @@
 
-# Universe Release Versioning 1.0.1
+# Universe Release Versioning 1.1.1
 This versioning system is meant to handle the aspect of release branching
 and unique development versions.
 
@@ -44,14 +44,14 @@ So, using Universe's system for versioning:
 ```bash
 $ cat <<INPUT | sort --version-sort
 1.11.5
-2.0.0-2.0.1-testing_for_2.1.1
+2.0.0-1-testing_for_2.1.1
 1.5.4
 2.0.1
 INPUT
 
 1.5.4
 1.11.5
-2.0.0-2.0.1-testing_for_2.1.1
+2.0.0-1-testing_for_2.1.1
 2.0.1
 ```
 
@@ -132,25 +132,25 @@ applied to that feature, and the backported one. The new version would be
 ## Development Builds
 Any local version shall be considered a development build. A special value
 for `Patch` is reserved for Development builds; Patch is `0` here only. This
-accommodates absolute ordering. To preserve information about the tip,
-the tip information is appended similarly to a branch directly after the
-development version. Lastly, a development identifier follows. Development
-identifiers must not start with a number.
+accommodates absolute ordering. To preserve information about the actual
+`Patch` of the tip, `Patch` is appended directly after the development
+version. Lastly, a development identifier follows. Development identifiers
+must not start with a number.
 
 ### Example
 `2.1.1` Release build
 
-`2.1.0-2.1.1-sha.2c3fa0dd96e08273f8531db160e6236440f8f1d9` Development
+`2.1.0-1-sha.2c3fa0dd96e08273f8531db160e6236440f8f1d9` Development
 build for next release (either `2.2.1`, `2.1.2`, or `3.0.1`)
 
 `2.45.56` Release build
 
-`2.44.0-2.45.56-sha.4b30d1d59e796e8796b43916f1d153a90c34a38b` Development
+`2.44.0-56-sha.4b30d1d59e796e8796b43916f1d153a90c34a38b` Development
 build for next release (either `2.46.1`, `2.45.57`, or `3.1.1`)
 
 `3.0.1` Release build
 
-`3.0.0-3.0.1-sha.4b30d1d59e796e8796b43916f1d153a90c34a38b` Development
+`3.0.0-1-sha.4b30d1d59e796e8796b43916f1d153a90c34a38b` Development
 build for next release (either `3.0.2`, `3.1.1`, or `4.0.1`)
 
 ## Pre-release Versions
@@ -168,7 +168,7 @@ Post-releases should be treated as normal patched releases.
 <dev-release> ::= <dev-branch> "-" <dev-metadata> | <release> "-" <dev-branch> "-" <dev-metadata>
 <release> ::= <branch> | <release> "-" <branch>
 
-<dev-branch> ::= <major> "." <minor> "." <dev-patch> "-" <branch>
+<dev-branch> ::= <major> "." <minor> "." <dev-patch> "-" <patch>
 <branch> ::= <major> "." <minor> "." <patch>
 <major> ::= <non-negative>
 <minor> ::= <non-negative>
