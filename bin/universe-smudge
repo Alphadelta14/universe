@@ -1,0 +1,11 @@
+#!/usr/bin/env python
+# EASY-INSTALL-ENTRY-SCRIPT: 'universe','console_scripts','universe-smudge'
+import sys
+from pkg_resources import load_entry_point
+
+__requires__ = 'universe'
+
+if __name__ == '__main__':
+    sys.exit(
+        load_entry_point('universe', 'console_scripts', 'universe-smudge')()
+    )

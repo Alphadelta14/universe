@@ -56,6 +56,9 @@ setup(
         ]
     },
     scripts=[
+        'bin/universe-clean',
+        'bin/universe-init',
+        'bin/universe-smudge',
     ],
     include_package_data=True,
     packages=find_packages(exclude=['tests']),
