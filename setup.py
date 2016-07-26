@@ -5,6 +5,9 @@ Universe Release Versioning - Python Implementation
 Author: Alpha <alpha@alphaservcomputing.solutions>
 """
 
+import re
+import subprocess
+
 from setuptools import setup, find_packages
 
 with open('requirements.txt') as req_file:
@@ -21,6 +24,14 @@ __version__ = '0.1.0'  # Overwritten below
 with open('universe/version.py') as handle:
     exec(handle.read())  # pylint: disable=exec-used
 
+if '$Id:' in __version__:
+    # Replace the smudged $Id:<sha1>$ with <sha1>
+    __version__ = re.sub(r'\$Id:([^$]+)\$', r'\1', __version__)
+elif '$Id$' in __version__:
+    # Replace non-smudged $Id$ with <sha1>
+    sha = subprocess.check_output(['git', 'rev-parse', 'HEAD']).strip()
+    __version__ = __version__.replace('$Id$', sha)
+
 setup(
     name='universe',
     version=__version__,
@@ -32,11 +43,19 @@ setup(
     install_requires=requirements,
     entry_points={
         'console_scripts': [
+            'universe-clean = universe.gitfilter:clean',
+            'universe-init = universe.gitfilter:main',
+            'universe-smudge = universe.gitfilter:smudge',
             'universe-release = universe.release:main',
+        ],
+        'distutils.commands': [
+            'release = universe.release:dev',
+            'major_release = universe.release:major',
+            'minor_release = universe.release:minor',
+            'patch_release = universe.release:patch',
         ]
     },
     scripts=[
-        'bin/universe-release',
     ],
     include_package_data=True,
     packages=find_packages(exclude=['tests']),

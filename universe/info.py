@@ -15,7 +15,7 @@ class VersionInfo(tuple):
     This subclasses a tuple to be compliant with other expectations of
     ``__version_info__``
     """
-    def __new__ (cls, args, **kwargs):
+    def __new__(cls, args, **kwargs):
         if not isinstance(args, tuple):
             args = (args,)
         return tuple.__new__(cls, (args,))
@@ -35,17 +35,11 @@ class VersionInfo(tuple):
             self.true_patch = self.patch = int(point_info[2])
             if self.patch == 0:
                 try:
-                    point_info = branches.pop(0).split('.')
-                except IndexError:
+                    self.true_patch = int(branches.pop(0))
+                except (IndexError, ValueError):
                     raise ValueError(
-                        'Development version (p=0) requires true tip after'
+                        'Development version requires original patch after'
                     )
-                if (self.major != int(point_info[0])
-                        or self.minor != int(point_info[1])):
-                    raise ValueError(
-                        'Major and Minor version should match development tip'
-                    )
-                self.true_patch = int(point_info[2])
                 try:
                     self.dev = DevelopmentMetadata(branches.pop(0))
                 except IndexError:
@@ -61,11 +55,12 @@ class VersionInfo(tuple):
             self.branch = VersionInfo(kwargs['branch'])
         if kwargs.get('dev'):
             self.dev = DevelopmentMetadata(kwargs['dev'])
+            self.patch = 0
         elif self.true_patch == 0:
             raise ValueError('Patch cannot be 0 in true tip')
 
     def __getitem__(self, key):
-        return (self.major, self.minor, self.true_patch)[key]
+        return (self.major, self.minor, self.patch)[key]
 
     def __getslice__(self, i, j):
         return self.__getitem__(slice(i, j))
@@ -83,17 +78,15 @@ class VersionInfo(tuple):
         return repr(self[:3])
 
 
-def module_version_info(module, detect_dev=True):
+def module_version_info(module):
     """Gets a ``VersionInfo`` object from this module. It expects to see
     a ``__version__`` attribute with the respective string
     """
-    if detect_dev:
-        dev = DevelopmentMetadata.detect()
-    return VersionInfo(module.__version__, dev=dev)
+    return VersionInfo(module.__version__)
 
 
-def package_version_info(package, detect_dev=True):
+def package_version_info(package):
     """Gets a ``VersionInfo`` object from this package name. It expects to
     see a ``__version__`` attribute with the respective string.
     """
-    return module_version_info(sys.modules[package], detect_dev)
+    return module_version_info(sys.modules[package])

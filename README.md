@@ -153,6 +153,12 @@ build for next release (either `2.46.1`, `2.45.57`, or `3.1.1`)
 `3.0.0-1-sha.4b30d1d59e796e8796b43916f1d153a90c34a38b` Development
 build for next release (either `3.0.2`, `3.1.1`, or `4.0.1`)
 
+### Storage Note
+Because the dynamic nature of development metadata contents, it is
+recommended to use a smudge such as `$Id$` or `$Date$` in the actual
+version file. Universe provides tools to automatically convert when
+releasing updates.
+
 ## Pre-release Versions
 Pre-releases should be considered as published development builds. Use the
 metadata prefixes `a.N`, `b.N`, `rc.N`
